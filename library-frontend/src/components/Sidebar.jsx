@@ -1,32 +1,46 @@
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
   return (
     <aside className="bg-gray-800 text-white w-64 p-4 flex-shrink-0">
       <nav>
         <ul className="space-y-2">
           <li>
-            <a href="#" className="block p-2 rounded-md hover:bg-gray-700">
+            <Link to="/" className="block p-2 rounded-md hover:bg-gray-700">
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded-md hover:bg-gray-700">
-              Browse Books
-            </a>
+            <Link
+              to="/featured-books"
+              className="block p-2 rounded-md hover:bg-gray-700"
+            >
+              Featured Books
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded-md hover:bg-gray-700">
+            <Link
+              to="/my-books"
+              className="block p-2 rounded-md hover:bg-gray-700"
+            >
               My Books
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded-md hover:bg-gray-700">
+            <Link
+              to="/reservations"
+              className="block p-2 rounded-md hover:bg-gray-700"
+            >
               Reservations
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded-md hover:bg-gray-700">
+            <Link
+              to="/settings"
+              className="block p-2 rounded-md hover:bg-gray-700"
+            >
               Settings
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

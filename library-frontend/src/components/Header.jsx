@@ -1,4 +1,8 @@
-const Header = () => {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Header = ({ onSearch }) => {
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   return (
     <header className="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md">
       <div className="text-2xl font-bold">
@@ -10,27 +14,51 @@ const Header = () => {
         <input
           type="text"
           placeholder="Search books..."
-          className="p-2 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="p-2 rounded-md text-white-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          onChange={(e) => onSearch(e.target.value)}
         />
-        <button className="bg-indigo-700 hover:bg-indigo-800 p-2 rounded-md">
-          Search
-        </button>
         <div className="relative">
-          <button className="flex items-center space-x-2 hover:text-indigo-200">
+          <button
+            onClick={() => setIsDropDownOpen(!isDropDownOpen)}
+            className="flex items-center space-x-2 hover:text-indigo-200"
+          >
             <span>User</span>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
           </button>
-
-          <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg hidden">
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-              Profile
-            </a>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-              My Books
-            </a>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-              Logout
-            </a>
-          </div>
+          {isDropDownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg">
+              <Link
+                to="/profile"
+                className="block p-2 rounded-md hover:bg-gray-700"
+              >
+                Profile
+              </Link>
+              <Link
+                to="/my-books"
+                className="block p-2 rounded-md hover:bg-gray-700"
+              >
+                My Books
+              </Link>
+              <Link
+                to="/logout"
+                className="block p-2 rounded-md hover:bg-gray-700"
+              >
+                Logout
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

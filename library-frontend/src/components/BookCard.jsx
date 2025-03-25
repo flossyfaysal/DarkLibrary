@@ -1,4 +1,4 @@
-const BookCard = ({ book }) => {
+const BookCard = ({ book, onBorrow }) => {
   return (
     <>
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
@@ -10,8 +10,12 @@ const BookCard = ({ book }) => {
         <div className="p-4">
           <h2 className="text-lg font-semibold text-gray-800">{book.title}</h2>
           <p className="text-sm text-gray-600">{book.author}</p>
-          <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-            Borrow
+          <button
+            className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor:hover"
+            onClick={() => onBorrow(book.id)}
+            disabled={!book.available}
+          >
+            {book.available ? "Borrow" : "Not Available"}
           </button>
         </div>
       </div>
