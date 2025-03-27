@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import BookCard from "./components/BookCard";
 import Home from "./pages/Home";
 import MyBooks from "./pages/MyBooks";
 import { mockBooks } from "./data/books";
+
+// Next tasks:
+// 1. Apply pagination.
+// 2. Apply sorting and filtering
+// 3. Sort all featured books based on the number of times they have been borrowed.
+// 4. Display the Featured books page.
+// 5. Display only 16 books per page per row 4 books and then pagination.
+// 6. Add a loader on header, and when the user loads more books on the books home page, it shows next 16 books loading.
 
 function App() {
   const [allBooks, setAllBooks] = useState(() => {
@@ -16,6 +23,9 @@ function App() {
   const [displayBooks, setDisplayBooks] = useState(allBooks); // Filtered for display
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBook, setSelectedBook] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [serachParams, setSearchParams] = useSearchParams();
+  const booksPerPage = 16;
 
   useEffect(() => {
     localStorage.setItem("books", JSON.stringify(allBooks));
@@ -72,6 +82,12 @@ function App() {
   const handleShowDetails = (book) => setSelectedBook(book);
   const handleCloseModal = () => setSelectedBook(null);
 
+  // Pagination Logic
+  const indexOfLastBook = currentPage * booksPerPage; // 16
+  const indexOfFirstBook = indexOfLastBook - booksPerPage; // 0
+  const currentBooks = displayBooks.slice(indexOfFirstBook, indexOfLastBook);
+  const totalPages = Math.ceil(displayBooks.length / booksPerPage);
+
   return (
     <div className="bg-gray-100 font-sans min-h-screen">
       <Header onSearch={handleSearch} />
@@ -82,11 +98,14 @@ function App() {
             path="/"
             element={
               <Home
-                books={displayBooks}
+                books={currentBooks}
                 onBorrow={handleBorrow}
                 onReturn={handleReturn}
                 onShowDetails={handleShowDetails}
                 searchTerm={searchTerm}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
               />
             }
           />
