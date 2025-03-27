@@ -34,7 +34,7 @@ const Home = ({
       {totalPages > 1 && (
         <div className="mt-6 flex justify-center items-center space-x-4">
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
             className="px-4 py-2 bg-indigo-600 text-white rounded-mgpx-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
           >
@@ -45,7 +45,7 @@ const Home = ({
           </span>
           <button
             onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              setCurrentPage(Math.min(currentPage + 1, totalPages))
             }
             disabled={currentPage === totalPages}
             className="px-4 py-2 bg-indigo-600 text-white rounded cursor-pointer hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed"

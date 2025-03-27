@@ -6,9 +6,7 @@ const Header = ({ onSearch }) => {
   return (
     <header className="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md">
       <div className="text-2xl font-bold">
-        <a href="#" className="hover:text-indigo-200">
-          LibraryHub
-        </a>
+        <Link to="/">DarkLibrary</Link>
       </div>
       <div className="flex items-center space-x-4">
         <input

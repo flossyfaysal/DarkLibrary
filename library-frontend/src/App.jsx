@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useSearchParams } from "react-router-dom";
+import { Routes, Route, useSearchParams, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
@@ -23,9 +23,10 @@ function App() {
   const [displayBooks, setDisplayBooks] = useState(allBooks); // Filtered for display
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBook, setSelectedBook] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [serachParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const booksPerPage = 16;
+
+  const currentPage = parseInt(searchParams.get("page") || 1, 10);
 
   useEffect(() => {
     localStorage.setItem("books", JSON.stringify(allBooks));
@@ -42,6 +43,7 @@ function App() {
   // Handle search
   const handleSearch = (term) => {
     setSearchTerm(term);
+    setSearchParams({ page: "1" });
     const filteredBooks = applySearchFilter(allBooks, term);
     setDisplayBooks(filteredBooks);
   };
@@ -81,6 +83,10 @@ function App() {
 
   const handleShowDetails = (book) => setSelectedBook(book);
   const handleCloseModal = () => setSelectedBook(null);
+
+  const setCurrentPage = (page) => {
+    setSearchParams({ page: page.toString() });
+  };
 
   // Pagination Logic
   const indexOfLastBook = currentPage * booksPerPage; // 16
