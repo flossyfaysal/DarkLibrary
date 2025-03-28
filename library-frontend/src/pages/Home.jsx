@@ -12,10 +12,39 @@ const Home = ({
   setCurrentPage,
   totalPages,
   loading,
+  sortOption,
+  filterOption,
+  onSort,
+  onFilter,
 }) => {
   return (
     <main className="flex-1 p-6 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">All Books</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">All Books</h1>
+        <div className="flex space-x-4">
+          {/* Sort Dropdown */}
+          <select
+            value={sortOption}
+            onChange={(e) => onSort(e.target.value)}
+            className="p-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none"
+          >
+            <option value="title-asc">Title A-Z</option>
+            <option value="title-desc">Title Z-A</option>
+            <option value="author-asc">Author A-Z</option>
+            <option value="author-desc">Author Z-A</option>
+          </select>
+          {/* Filter Dropdown */}
+          <select
+            value={filterOption}
+            onChange={(e) => onFilter(e.target.value)}
+            className="p-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none"
+          >
+            <option value="all">All Books</option>
+            <option value="available">Available</option>
+            <option value="borrowed">Borrowed</option>
+          </select>
+        </div>
+      </div>
       {loading ? (
         <SkeletonLoader />
       ) : (

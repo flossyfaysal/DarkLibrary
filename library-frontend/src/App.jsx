@@ -6,14 +6,6 @@ import Home from "./pages/Home";
 import MyBooks from "./pages/MyBooks";
 import { mockBooks } from "./data/books";
 
-// Next tasks:
-// 1. Apply pagination.
-// 2. Apply sorting and filtering
-// 3. Sort all featured books based on the number of times they have been borrowed.
-// 4. Display the Featured books page.
-// 5. Display only 16 books per page per row 4 books and then pagination.
-// 6. Add a loader on the header below when homepage loads, and pagination, and serach.
-
 function App() {
   const [allBooks, setAllBooks] = useState(() => {
     const savedBooks = localStorage.getItem("books");
@@ -25,6 +17,8 @@ function App() {
   const [selectedBook, setSelectedBook] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [sortOption, setSortOption] = useState("title-asc");
+  const [filterOption, setFilterOption] = useState("all");
   const booksPerPage = 16;
   const location = useLocation();
 
@@ -36,6 +30,8 @@ function App() {
 
   const resetHome = () => {
     setSearchTerm("");
+    setSortOption("title-asc");
+    setFilterOption("all");
     setDisplayBooks(allBooks);
   };
 
@@ -49,7 +45,6 @@ function App() {
       });
       return () => clearTimeout(timer);
     } else {
-      setLoading(false);
       const timer = setTimeout(() => {
         setLoading(false), 500;
       });
@@ -57,12 +52,37 @@ function App() {
     }
   }, [location.pathname]);
 
-  const applySearchFilter = (books, term) => {
-    return books.filter(
+  const applySearchSortFilter = (books, term, sort, filter) => {
+    let results = books.filter(
       (book) =>
         book.title.toLowerCase().includes(term.toLowerCase()) ||
         book.author.toLowerCase().includes(term.toLowerCase())
     );
+
+    // Filter
+    if (filter === "available") {
+      results = results.filter((book) => book.available);
+    } else if (filter === "borrowed") {
+      results = results.filter((book) => !book.available);
+    }
+
+    // Sort
+    results.sort((a, b) => {
+      if (sort === "title-asc") {
+        return a.title.localeCompare(b.title);
+      }
+      if (sort === "title-desc") {
+        return b.title.localeCompare(a.title);
+      }
+      if (sort === "author-asc") {
+        return a.author.localeCompare(b.author);
+      }
+      if (sort === "author-desc") {
+        return b.author.localeCompare(a.author);
+      }
+    });
+
+    return results;
   };
 
   // Handle search
@@ -70,7 +90,12 @@ function App() {
     setLoading(true);
     setSearchTerm(term);
     setSearchParams({ page: "1" });
-    const filteredBooks = applySearchFilter(allBooks, term);
+    const filteredBooks = applySearchSortFilter(
+      allBooks,
+      term,
+      sortOption,
+      filterOption
+    );
     setTimeout(() => {
       setDisplayBooks(filteredBooks);
       setLoading(false);
@@ -85,7 +110,9 @@ function App() {
         : book
     );
     setAllBooks(updatedBooks);
-    setDisplayBooks(applySearchFilter(updatedBooks, searchTerm));
+    setDisplayBooks(
+      applySearchSortFilter(updatedBooks, searchTerm, sortOption, filterOption)
+    );
     const borrowedBook = allBooks.find((b) => b.id === bookId);
     if (borrowedBook) {
       alert(`You have borrowed "${borrowedBook.title}"!`);
@@ -101,13 +128,44 @@ function App() {
         : book
     );
     setAllBooks(updatedBooks);
-    setDisplayBooks(applySearchFilter(updatedBooks, searchTerm));
+    setDisplayBooks(
+      applySearchSortFilter(updatedBooks, searchTerm, sortOption, filterOption)
+    );
     const returnedBook = allBooks.find((b) => b.id === bookId);
     if (returnedBook) {
       alert(`You have returned "${returnedBook.title}"!`);
     } else {
       alert("Book not found!");
     }
+  };
+
+  const handleSorting = (sort) => {
+    setLoading(true);
+    setSortOption(sort);
+    const sortedBooks = applySearchSortFilter(
+      allBooks,
+      searchTerm,
+      sort,
+      filterOption
+    );
+    setTimeout(() => {
+      setDisplayBooks(sortedBooks);
+      setLoading(false);
+    }, 500);
+  };
+  const handleFiltering = (filter) => {
+    setLoading(true);
+    setFilterOption(filter);
+    const filteredBooks = applySearchSortFilter(
+      allBooks,
+      searchTerm,
+      sortOption,
+      filter
+    );
+    setTimeout(() => {
+      setDisplayBooks(filteredBooks);
+      setLoading(false);
+    }, 500);
   };
 
   const handleShowDetails = (book) => setSelectedBook(book);
@@ -149,6 +207,10 @@ function App() {
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 loading={loading}
+                onSort={handleSorting}
+                onFilter={handleFiltering}
+                sortOption={sortOption}
+                filterOption={filterOption}
               />
             }
           />
