@@ -10,7 +10,15 @@ class Book extends Model
         'title',
         'author',
         'isbn',
-        'total_copies',
-        'available_copies',
+        'description',
+        'cover_image',
+        'category',
+        'quantity',
+        'available_quantity',
+        'publication_year'
     ];
+
+    public function borrowings(){
+        return $this->hasMany(Borrowing::class);
+    }
 }
