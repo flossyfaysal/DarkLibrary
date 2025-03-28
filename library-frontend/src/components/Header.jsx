@@ -1,19 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Header = ({ onSearch }) => {
+const Header = ({ onSearch, onReset, searchTerm, setSearchTerm }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+
+  const handleInputChange = (e) => {
+    const term = e.target.value;
+    onSearch(term);
+    setSearchTerm(term);
+  };
+
   return (
     <header className="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md">
       <div className="text-2xl font-bold">
-        <Link to="/">DarkLibrary</Link>
+        <Link to="/" onClick={onReset}>
+          DarkLibrary
+        </Link>
       </div>
       <div className="flex items-center space-x-4">
         <input
           type="text"
           placeholder="Search books..."
           className="p-2 rounded-md text-white-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          onChange={(e) => onSearch(e.target.value)}
+          onChange={handleInputChange}
+          value={searchTerm}
         />
         <div className="relative">
           <button

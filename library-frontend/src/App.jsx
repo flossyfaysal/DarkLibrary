@@ -12,7 +12,7 @@ import { mockBooks } from "./data/books";
 // 3. Sort all featured books based on the number of times they have been borrowed.
 // 4. Display the Featured books page.
 // 5. Display only 16 books per page per row 4 books and then pagination.
-// 6. Add a loader on header, and when the user loads more books on the books home page, it shows next 16 books loading.
+// 6. Add a loader on the header below when homepage loads, and pagination, and serach.
 
 function App() {
   const [allBooks, setAllBooks] = useState(() => {
@@ -24,13 +24,38 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBook, setSelectedBook] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
   const booksPerPage = 16;
+  const location = useLocation();
 
   const currentPage = parseInt(searchParams.get("page") || 1, 10);
 
   useEffect(() => {
     localStorage.setItem("books", JSON.stringify(allBooks));
   }, [allBooks]);
+
+  const resetHome = () => {
+    setSearchTerm("");
+    setDisplayBooks(allBooks);
+  };
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setLoading(true);
+      resetHome();
+
+      const timer = setTimeout(() => {
+        setLoading(false), 500;
+      });
+      return () => clearTimeout(timer);
+    } else {
+      setLoading(false);
+      const timer = setTimeout(() => {
+        setLoading(false), 500;
+      });
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
 
   const applySearchFilter = (books, term) => {
     return books.filter(
@@ -42,10 +67,14 @@ function App() {
 
   // Handle search
   const handleSearch = (term) => {
+    setLoading(true);
     setSearchTerm(term);
     setSearchParams({ page: "1" });
     const filteredBooks = applySearchFilter(allBooks, term);
-    setDisplayBooks(filteredBooks);
+    setTimeout(() => {
+      setDisplayBooks(filteredBooks);
+      setLoading(false);
+    }, 500);
   };
 
   // Handle borrowing
@@ -85,7 +114,9 @@ function App() {
   const handleCloseModal = () => setSelectedBook(null);
 
   const setCurrentPage = (page) => {
+    setLoading(true);
     setSearchParams({ page: page.toString() });
+    setTimeout(() => setLoading(false), 500);
   };
 
   // Pagination Logic
@@ -96,7 +127,12 @@ function App() {
 
   return (
     <div className="bg-gray-100 font-sans min-h-screen">
-      <Header onSearch={handleSearch} />
+      <Header
+        onSearch={handleSearch}
+        onReset={resetHome}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <div className="flex min-h-screen">
         <Sidebar />
         <Routes>
@@ -112,6 +148,7 @@ function App() {
                 totalPages={totalPages}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                loading={loading}
               />
             }
           />
