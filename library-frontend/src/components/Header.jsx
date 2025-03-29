@@ -54,7 +54,7 @@ const Header = ({ onSearch, onReset, searchTerm, setSearchTerm }) => {
                 Profile
               </Link>
               <Link
-                to="/my-books"
+                to="/admin/my-books"
                 className="block p-2 rounded-md hover:bg-gray-700"
               >
                 My Books

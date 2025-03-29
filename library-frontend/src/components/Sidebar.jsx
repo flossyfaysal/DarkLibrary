@@ -6,13 +6,16 @@ const Sidebar = () => {
       <nav>
         <ul className="space-y-2">
           <li>
-            <Link to="/" className="block p-2 rounded-md hover:bg-gray-700">
+            <Link
+              to="/admin"
+              className="block p-2 rounded-md hover:bg-gray-700"
+            >
               Home
             </Link>
           </li>
           <li>
             <Link
-              to="/featured-books"
+              to="/admin/featured-books"
               className="block p-2 rounded-md hover:bg-gray-700"
             >
               Featured Books
@@ -20,7 +23,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/my-books"
+              to="/admin/my-books"
               className="block p-2 rounded-md hover:bg-gray-700"
             >
               My Books
@@ -28,7 +31,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/reservations"
+              to="/admin/reservations"
               className="block p-2 rounded-md hover:bg-gray-700"
             >
               Reservations
@@ -36,7 +39,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/settings"
+              to="/admin/settings"
               className="block p-2 rounded-md hover:bg-gray-700"
             >
               Settings
