@@ -10,37 +10,24 @@ const Auth = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        {/* Logo or Branding (Mimicking X.com's simplicity) */}
         <div className="flex justify-center mb-6">
-          <svg
-            className="w-10 h-10 text-black"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {/* Simplified 'X' logo */}
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
+          <img
+            src="/../dist/vite.svg"
+            alt="Logo"
+            className="w-24 h-24 rounded-full shadow-lg"
+          />
         </div>
 
         {/* Heading */}
         <h1 className="text-3xl font-bold text-black text-center mb-2">
-          {!isLogin ? "Create your account" : "Library Login"}
+          {isLogin ? "Library Login" : "Create an Account"}
         </h1>
         <p className="text-gray-500 text-center mb-6">
-          Join the biggest library hub today.
+          {isLogin ? "Access your library" : "Join us today!"}
         </p>
 
         {/* Form */}
         <form className="space-y-4">
-          {/* Name Field */}
-          <div>
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full px-4 py-3 text-black bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
-            />
-          </div>
-
           {/* Email Field */}
           <div>
             <input
@@ -59,17 +46,17 @@ const Auth = () => {
             />
           </div>
 
-          {/* Signup Button */}
+          {/* Sign in Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="cursor-pointer w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Sign up
+            Sign in
           </button>
-          {/* Sign up with Google Button */}
+          {/* Sign in with Google Button */}
           <button
             type="button"
-            className="w-full py-3 bg-white text-black font-semibold rounded-full border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
+            className="cursor-pointer w-full py-3 bg-white text-black font-semibold rounded-full border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
           >
             {/* Google Logo SVG */}
             <svg
@@ -95,7 +82,7 @@ const Auth = () => {
                 fill="#EA4335"
               />
             </svg>
-            <span>Sign up with Google</span>
+            <span>Sign in with Google</span>
           </button>
         </form>
 
@@ -112,11 +99,15 @@ const Auth = () => {
           .
         </p>
 
-        {/* Login Link */}
+        {/* Sign in Page */}
         <p className="mt-4 text-center text-sm text-gray-600">
-          Already have an account?{" "}
-          <a href="/login" className="text-blue-500 hover:underline">
-            Log in
+          Want to create an account ?{" "}
+          <a
+            onClick={() => setIsLogin(!isLogin)}
+            href="javascript:void"
+            className="text-blue-500 hover:underline"
+          >
+            {isLogin ? "Sign Up" : "Sign In"}
           </a>
         </p>
       </div>
