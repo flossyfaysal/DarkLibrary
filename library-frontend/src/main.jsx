@@ -7,7 +7,11 @@ import Auth from "./pages/Auth";
 
 const Root = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+      }}
+    >
       <Routes>
         <Route path="/auth/" element={<Auth />} />
         <Route path="/admin/*" element={<ProtectedApp />} />

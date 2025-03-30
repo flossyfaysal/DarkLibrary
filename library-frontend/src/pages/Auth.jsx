@@ -1,11 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthForm from "../hooks/useAuthForm";
+
+// Resolve an issue: When login page reloads, its possible to stays at admin page, and when isauthenticated false then it stils rout says /admin, I need to remove this.
 
 const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const { formData, errors, handleChange, validate, setErrors } = useAuthForm();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!validate(isLogin)) return;
+    try {
+      if (!isLogin) {
+        console.log("Registering a Student", formData);
+        // Call your API to register a student
+        setIsLogin(true);
+      } else {
+        console.log("Logging in a Student", formData);
+        // Call your API to log in a student
+        localStorage.setItem("isAuthenticated", "true");
+        navigate("/admin");
+      }
+    } catch (error) {
+      setErrors({ form: "An error occurred. Please try again." });
+      console.error("Error during authentication:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -27,23 +53,49 @@ const Auth = () => {
         </p>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name Field */}
+          {!isLogin && (
+            <div>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+                className="w-full px-4 py-3 text-black bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              )}
+            </div>
+          )}
           {/* Email Field */}
           <div>
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="w-full px-4 py-3 text-black bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
-
-          {/* Password Field */}
           <div>
             <input
               type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full px-4 py-3 text-black bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
 
           {/* Sign in Button */}
@@ -51,7 +103,7 @@ const Auth = () => {
             type="submit"
             className="cursor-pointer w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Sign in
+            {isLogin ? "Sign In" : "Sign Up"}
           </button>
           {/* Sign in with Google Button */}
           <button
@@ -82,22 +134,33 @@ const Auth = () => {
                 fill="#EA4335"
               />
             </svg>
-            <span>Sign in with Google</span>
+            <span>
+              {isLogin ? "Sign in with Google" : "Sign up with Google"}
+            </span>
           </button>
         </form>
 
         {/* Terms and Links */}
-        <p className="mt-4 text-xs text-gray-500 text-center">
-          By signing up, you agree to the{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Privacy Policy
-          </a>
-          .
-        </p>
+        {!isLogin && (
+          <p className="mt-4 text-sm text-gray-500 text-center">
+            By signing up, you agree to the{" "}
+            <a href="/terms" className="text-blue-500 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/privacy" className="text-blue-500 hover:underline">
+              Privacy Policy
+            </a>
+            .
+          </p>
+        )}
+        {isLogin && (
+          <p className="mt-4 text-sm text-gray-500 text-center">
+            <a href="#" className="text-blue-500 hover:underline">
+              Forgot Password?
+            </a>
+          </p>
+        )}
 
         {/* Sign in Page */}
         <p className="mt-4 text-center text-sm text-gray-600">
