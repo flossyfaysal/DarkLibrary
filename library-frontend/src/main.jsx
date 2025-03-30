@@ -1,29 +1,32 @@
 import React, { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 import "./index.css";
 import App from "./App";
 import Auth from "./pages/Auth";
+import Home from "./pages/HomeView";
+import HomeView from "./pages/HomeView";
 
 const Root = () => {
   return (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-      }}
-    >
-      <Routes>
-        <Route path="/auth/" element={<Auth />} />
-        <Route path="/admin/*" element={<ProtectedApp />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <Router
+        future={{
+          v7_startTransition: true,
+        }}
+      >
+        <Routes>
+          <Route path="/auth/" element={<Auth />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/admin/*" element={<App />} />
+          </Route>
+          <Route path="/" element={<HomeView />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-};
-
-// Simple auth check (replace with real auth logic)
-const ProtectedApp = () => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true"; // Simulated auth
-  return isAuthenticated ? <App /> : <Auth />;
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

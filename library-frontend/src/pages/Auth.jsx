@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthForm from "../hooks/useAuthForm";
+import { AuthContext } from "../context/AuthContext";
 
 // Resolve an issue: When login page reloads, its possible to stays at admin page, and when isauthenticated false then it stils rout says /admin, I need to remove this.
 
@@ -9,6 +10,12 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const { formData, errors, handleChange, validate, setErrors } = useAuthForm();
+  const { login } = useContext(AuthContext);
+
+  // Clear errors when switching to mode
+  useEffect(() => {
+    setErrors({});
+  }, [isLogin, setErrors]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +29,7 @@ const Auth = () => {
       } else {
         console.log("Logging in a Student", formData);
         // Call your API to log in a student
-        localStorage.setItem("isAuthenticated", "true");
+        login();
         navigate("/admin");
       }
     } catch (error) {

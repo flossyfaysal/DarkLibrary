@@ -23,26 +23,62 @@ const Home = ({
         <h1 className="text-3xl font-bold text-gray-800 mb-6">All Books</h1>
         <div className="flex space-x-4">
           {/* Sort Dropdown */}
-          <select
-            value={sortOption}
-            onChange={(e) => onSort(e.target.value)}
-            className="p-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none"
-          >
-            <option value="title-asc">Title A-Z</option>
-            <option value="title-desc">Title Z-A</option>
-            <option value="author-asc">Author A-Z</option>
-            <option value="author-desc">Author Z-A</option>
-          </select>
+          <div className="relative w-full max-w-xs">
+            <select
+              value={sortOption}
+              onChange={(e) => onSort(e.target.value)}
+              className="w-full p-2.5 pr-10 rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-50 transition-colors duration-200 appearance-none cursor-pointer"
+            >
+              <option value="title-asc">Title A-Z</option>
+              <option value="title-desc">Title Z-A</option>
+              <option value="author-asc">Author A-Z</option>
+              <option value="author-desc">Author Z-A</option>
+            </select>
+            <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </span>
+          </div>
           {/* Filter Dropdown */}
-          <select
-            value={filterOption}
-            onChange={(e) => onFilter(e.target.value)}
-            className="p-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none"
-          >
-            <option value="all">All Books</option>
-            <option value="available">Available</option>
-            <option value="borrowed">Borrowed</option>
-          </select>
+          <div className="relative w-full max-w-xs">
+            <select
+              value={filterOption}
+              onChange={(e) => onFilter(e.target.value)}
+              className="w-full p-2.5 pr-10 rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-50 transition-colors duration-200 appearance-none cursor-pointer"
+            >
+              <option value="all">All Books</option>
+              <option value="available">Available</option>
+              <option value="borrowed">Borrowed</option>
+            </select>
+            <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </span>
+          </div>
         </div>
       </div>
       {loading ? (
